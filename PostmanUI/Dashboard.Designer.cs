@@ -128,6 +128,8 @@
             Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(4);
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "Dashboard";
             Text = "Postman App by Teboho Mokgosi";
             statusStrip.ResumeLayout(false);
