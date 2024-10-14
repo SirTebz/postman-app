@@ -13,12 +13,27 @@ public class ApiAccess : IApiAccess
 
     public async Task<string> CallApiAsync(string url, string content, HttpAction action = HttpAction.GET, bool isformatOutput = true)
     {
-
+        StringContent stringContent = new(content, Encoding.UTF8, "application/json");
+        return await CallApiAsync(url, new StringContent(content), action, isformatOutput);
     }
 
-    public async Task<string> CallApiAsync(string url, bool isformatOutput = true, HttpAction action = HttpAction.GET, HttpContent? content = null)
+    public async Task<string> CallApiAsync(string url, HttpContent? content = null, HttpAction action = HttpAction.GET, bool isformatOutput = true)
     {
-        var response = await client.GetAsync(url);
+        HttpResponseMessage? response;
+
+        switch (action)
+        {
+            case HttpAction.GET:
+                response = await client.GetAsync(url);
+                break;
+            case HttpAction.POST:
+                response = await client.PostAsync(url, content);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof (action), action, null);
+        }
+
+        //response = await client.GetAsync(url);
 
         if (response.IsSuccessStatusCode)
         {

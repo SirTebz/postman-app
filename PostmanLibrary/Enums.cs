@@ -8,5 +8,6 @@ namespace PostmanLibrary;
 
 public enum HttpAction
 {
-    GET/*, POST, PUT, DELETE*/
+    GET,
+    POST /*, POST, PUT, DELETE*/
 }
