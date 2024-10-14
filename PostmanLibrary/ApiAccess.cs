@@ -11,7 +11,12 @@ public class ApiAccess : IApiAccess
 {
     private readonly HttpClient client = new();
 
-    public async Task<string> CallApiAsync(string url, bool isformatOutput = true, HttpAction action = HttpAction.GET)
+    public async Task<string> CallApiAsync(string url, string content, HttpAction action = HttpAction.GET, bool isformatOutput = true)
+    {
+
+    }
+
+    public async Task<string> CallApiAsync(string url, bool isformatOutput = true, HttpAction action = HttpAction.GET, HttpContent? content = null)
     {
         var response = await client.GetAsync(url);
 
