@@ -11,13 +11,13 @@ public class ApiAccess : IApiAccess
 {
     private readonly HttpClient client = new();
 
-    public async Task<string> CallApiAsync(string url, string content, HttpAction action = HttpAction.GET, bool isformatOutput = true)
+    public async Task<string> CallApiAsync(string url, string content, HttpAction action = HttpAction.GET, bool formatOutput = true)
     {
         StringContent stringContent = new(content, Encoding.UTF8, "application/json");
-        return await CallApiAsync(url, new StringContent(content), action, isformatOutput);
+        return await CallApiAsync(url, stringContent, action, formatOutput);
     }
 
-    public async Task<string> CallApiAsync(string url, HttpContent? content = null, HttpAction action = HttpAction.GET, bool isformatOutput = true)
+    public async Task<string> CallApiAsync(string url, HttpContent? content = null, HttpAction action = HttpAction.GET, bool formatOutput = true)
     {
         HttpResponseMessage? response;
 
@@ -29,6 +29,15 @@ public class ApiAccess : IApiAccess
             case HttpAction.POST:
                 response = await client.PostAsync(url, content);
                 break;
+            case HttpAction.PUT:
+                response = await client.PutAsync(url, content);
+                break;
+            case HttpAction.PATCH:
+                response = await client.PatchAsync(url, content);
+                break;
+            case HttpAction.DELETE:
+                response = await client.DeleteAsync(url);
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof (action), action, null);
         }
@@ -39,7 +48,7 @@ public class ApiAccess : IApiAccess
         {
             string json = await response.Content.ReadAsStringAsync();
 
-            if (isformatOutput)
+            if (formatOutput)
             {
                 var jsonElement = JsonSerializer.Deserialize<JsonElement>(json);
                 json = JsonSerializer.Serialize(jsonElement, new JsonSerializerOptions { WriteIndented = true });
